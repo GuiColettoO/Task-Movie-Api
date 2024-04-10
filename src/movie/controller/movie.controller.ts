@@ -20,13 +20,13 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
+@UseInterceptors(CacheInterceptor)
 @ApiTags('movies')
 @UseGuards(AuthGuard)
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
-  // @UseInterceptors(CacheInterceptor)
   @CacheKey('movies')
   @CacheTTL(60)
   @Post()
@@ -34,7 +34,6 @@ export class MovieController {
     return await this.movieService.create(movie);
   }
 
-  // @UseInterceptors(CacheInterceptor)
   @CacheKey('movies')
   @CacheTTL(60)
   @Get('/:id')
@@ -42,7 +41,6 @@ export class MovieController {
     return await this.movieService.findById(id);
   }
 
-  // @UseInterceptors(CacheInterceptor)
   @CacheKey('movies')
   @CacheTTL(60)
   @Get()
@@ -50,7 +48,6 @@ export class MovieController {
     return await this.movieService.findAll(params);
   }
 
-  // @UseInterceptors(CacheInterceptor)
   @CacheKey('movies')
   @CacheTTL(60)
   @Put('/:id')
@@ -58,7 +55,6 @@ export class MovieController {
     await this.movieService.update(params.id, movie);
   }
 
-  // @UseInterceptors(CacheInterceptor)
   @CacheKey('movies')
   @CacheTTL(60)
   @Delete('/:id')

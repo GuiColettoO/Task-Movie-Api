@@ -36,6 +36,7 @@ export class UserService {
     const cachedUser = await this.cacheManager.get<UserDto>(username);
 
     if (cachedUser) {
+      console.log(`Retrieved user '${username}' from cache`);
       return cachedUser;
     }
 
@@ -44,6 +45,7 @@ export class UserService {
     });
 
     if (!userFound) {
+      console.log(`User '${username}' not found in database`);
       return null;
     }
 
@@ -52,6 +54,8 @@ export class UserService {
       username: userFound.username,
       password: userFound.passwordHash,
     });
+
+    console.log(`Added user '${username}' to cache`);
 
     return {
       id: userFound.id,

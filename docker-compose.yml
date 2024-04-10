@@ -5,9 +5,7 @@ services:
     container_name: cache
     image: redis
     ports:
-      - 6379:6379
-    volumes:
-      - redis:/data
+      - 6383:6383
 
   postgres:
     image: postgres:latest
@@ -20,6 +18,21 @@ services:
       POSTGRES_PASSWORD: teste123
     volumes:
       - postgres:/var/lib/postgresql/data
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:teste123@postgres:5432/task-movie-api
+    command: ["npm", "run", "migrate:run", "&&", "npm", "run", "start:prod"]
 
 volumes:
   redis:

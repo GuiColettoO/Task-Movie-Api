@@ -11,12 +11,12 @@ import { AuthService } from '../service/auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
+@UseInterceptors(CacheInterceptor)
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @UseInterceptors(CacheInterceptor)
   @CacheKey('auth')
   @CacheTTL(60)
   @HttpCode(HttpStatus.OK)

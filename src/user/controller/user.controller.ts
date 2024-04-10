@@ -6,7 +6,6 @@ import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @ApiTags('users')
 @Controller('user')
-//@UseInterceptors(CacheInterceptor)
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
@@ -14,6 +13,7 @@ export class UsersController {
   @CacheKey('users')
   @CacheTTL(60)
   async create(@Body() user: UserDto) {
+    console.log(user);
     return await this.userService.create(user);
   }
 }
