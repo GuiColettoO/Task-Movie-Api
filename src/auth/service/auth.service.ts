@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync as bcryptCompareSync } from 'bcrypt';
 import { UserService } from 'src/user/service/user.service';
-import { AuthResponseDto } from '../dto/auth.dto';
+import { AuthLoginDto, AuthResponseDto } from '../dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,10 +18,10 @@ export class AuthService {
     );
   }
 
-  async signIn(username: string, password: string): Promise<AuthResponseDto> {
-    const foundUser = await this.userService.findByUserName(username);
+  async signIn(user: AuthLoginDto): Promise<AuthResponseDto> {
+    const foundUser = await this.userService.findByUserName(user.username);
 
-    if (!foundUser || !bcryptCompareSync(password, foundUser.password)) {
+    if (!foundUser || !bcryptCompareSync(user.password, foundUser.password)) {
       throw new UnauthorizedException('Invalid credentials');
     }
 

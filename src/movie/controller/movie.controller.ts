@@ -16,7 +16,9 @@ import {
 } from '../dto/movie.dto';
 import { MovieService } from '../service/movie.service';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('movies')
 @UseGuards(AuthGuard)
 @Controller('movie')
 export class MovieController {
