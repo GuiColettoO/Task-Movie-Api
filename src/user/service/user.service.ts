@@ -1,13 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { UserDto } from '../dto/user.dto';
 import { hashSync as bcryptHashSync } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/db/entities/user.entity';
 import { Repository } from 'typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
   constructor(
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
@@ -30,6 +33,12 @@ export class UserService {
   }
 
   async findByUserName(username: string): Promise<UserDto | null> {
+    const cachedUser = await this.cacheManager.get<UserDto>(username);
+
+    if (cachedUser) {
+      return cachedUser;
+    }
+
     const userFound = await this.userRepository.findOne({
       where: { username },
     });
@@ -37,6 +46,12 @@ export class UserService {
     if (!userFound) {
       return null;
     }
+
+    await this.cacheManager.set(username, {
+      id: userFound.id,
+      username: userFound.username,
+      password: userFound.passwordHash,
+    });
 
     return {
       id: userFound.id,

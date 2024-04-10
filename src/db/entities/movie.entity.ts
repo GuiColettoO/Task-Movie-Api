@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { IsNotEmpty, IsString, IsEnum, IsDate } from 'class-validator';
-import { MovieClassificationEnum } from 'src/movie/enum/movieClassification.enum';
+import { IsNotEmpty, IsString, IsDate } from 'class-validator';
 
 @Entity({ name: 'movie' })
 export class MovieEntity {
@@ -22,6 +21,7 @@ export class MovieEntity {
   year_release: Date;
 
   @Column({ type: 'varchar' })
-  @IsEnum(MovieClassificationEnum)
+  @IsString()
+  @IsNotEmpty()
   classification?: string;
 }

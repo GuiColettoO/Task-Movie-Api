@@ -3,11 +3,9 @@ import {
   IsUUID,
   MaxLength,
   MinLength,
-  IsEnum,
   IsDateString,
   IsOptional,
 } from 'class-validator';
-import { MovieClassificationEnum } from '../enum/movieClassification.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class MovieDto {
@@ -44,7 +42,9 @@ export class MovieDto {
     description: 'The classification of the movie',
     example: 'PG-13',
   })
-  @IsEnum(MovieClassificationEnum)
+  @IsString()
+  @MinLength(3)
+  @MaxLength(256)
   classification: string;
 }
 

@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  redis:
+    container_name: cache
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
   postgres:
     image: postgres:latest
     container_name: task-movie-api-db
@@ -10,3 +18,11 @@ services:
       POSTGRES_DB: task-movie-api
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: teste123
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  redis:
+    driver: local
+  postgres:
+    driver: local
