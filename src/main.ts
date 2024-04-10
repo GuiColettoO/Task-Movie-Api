@@ -7,9 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Documentação com Swagger - Fábrica de Sinapse')
+    .setTitle('Documentação do Task Movie Api')
     .setDescription(
-      'O Swagger (aka OpenApi) é uma biblioteca muito conhecida no universo backend, estando disponível para diversas linguagem',
+      'Essa API é um desafio feito pela a empresa MKS Desenvolvimento de Sistemas e Empreendimentos Ltda',
     )
     .setVersion('1.0')
     .addTag('users')
